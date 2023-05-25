@@ -33,7 +33,7 @@ namespace BGK.Utility
 
     public static class ArrayManagement
     {
-        public static void AddToArray<T>(T value, ref T[] array)
+        public static void Add<T>(this T[] array, T value)
         {
             T[] replace = new T[array.Length + 1];
 
@@ -47,7 +47,7 @@ namespace BGK.Utility
             array = replace;
         }
 
-        public static void AddToArray<T>(T[] value, ref T[,] array)
+        public static void Add<T>(this T[,] array, T[] value)
         {
             int length = array.GetLength(1);
 
@@ -74,9 +74,9 @@ namespace BGK.Utility
             array = replace;
         }
 
-        public static void ReplaceInArray<T>(T value, T replaceValue, ref T[] array)
+        public static void Replace<T>(this T[] array, T value, T replaceValue)
         {
-            int ind = SearchUnsorted.LinearSearch(ref array, value);
+            int ind = array.LinearSearch(value);
 
             if (ind == -1)
             {
@@ -86,11 +86,11 @@ namespace BGK.Utility
             array[ind] = replaceValue;
         }
 
-        public static void ReplaceAllInArray<T>(T value, T replaceValue, ref T[] array)
+        public static void ReplaceAll<T>(this T[] array, T value, T replaceValue)
         {
             while (true)
             {
-                int ind = SearchUnsorted.LinearSearch(ref array, value);
+                int ind = array.LinearSearch(value);
 
                 if (ind == -1)
                 {
@@ -101,9 +101,9 @@ namespace BGK.Utility
             }
         }
 
-        public static void RemoveFromArray<T>(T value, ref T[] array)
+        public static void Remove<T>(this T[] array, T value)
         {
-            int ind = SearchUnsorted.LinearSearch(ref array, value);
+            int ind = array.LinearSearch(value);
 
             if (ind == -1)
             {
@@ -127,11 +127,11 @@ namespace BGK.Utility
             array = replace;
         }
 
-        public static void RemoveAllFromArray<T>(T value, ref T[] array)
+        public static void RemoveAll<T>(this T[] array, T value)
         {
             while (true)
             {
-                int ind = SearchUnsorted.LinearSearch(ref array, value);
+                int ind = array.LinearSearch(value);
 
                 if (ind == -1)
                 {
@@ -156,7 +156,7 @@ namespace BGK.Utility
             }
         }
 
-        public static T[][] ConvertToArrayArray<T>(ref T[,] array)
+        public static T[][] ConvertToArrayArray<T>(this T[,] array)
         {
             T[][] converted = new T[array.GetLength(0)][];
 
@@ -176,7 +176,7 @@ namespace BGK.Utility
             return converted;
         }
 
-        public static T[,] ConvertToMultidimensional<T>(ref T[][] array, bool skipEmpty)
+        public static T[,] ConvertToMultidimensional<T>(this T[][] array, bool skipEmpty)
         {
             int length = 0;
             int maxLength = 0;
@@ -230,15 +230,15 @@ namespace BGK.Utility
             return converted;
         }
 
-        public static T[,] ConvertToMultidimensional<T>(ref T[][] array)
+        public static T[,] ConvertToMultidimensional<T>(this T[][] array)
         {
-            return ConvertToMultidimensional(ref array, true);
+            return array.ConvertToMultidimensional(true);
         }
     }
 
     public static class Sort
     {
-        public static T[] BubbleSort<T>(T[] array, Order ord) where T : System.IComparable<T>
+        public static T[] BubbleSort<T>(this T[] array, Order ord) where T : System.IComparable<T>
         {
             int n = array.Length;
             for (int i = 0; i < n - 1; i++)
@@ -267,7 +267,7 @@ namespace BGK.Utility
             return array;
         }
 
-        public static T[] InsertionSort<T>(T[] array, Order ord) where T : System.IComparable<T>
+        public static T[] InsertionSort<T>(this T[] array, Order ord) where T : System.IComparable<T>
         {
             for (int i = 1; i < array.Length; i++)
             {
@@ -298,7 +298,7 @@ namespace BGK.Utility
             return array;
         }
 
-        public static T[] SelectionSort<T>(T[] array, Order ord) where T : System.IComparable<T>
+        public static T[] SelectionSort<T>(this T[] array, Order ord) where T : System.IComparable<T>
         {
             int arrayLength = array.Length;
             for (int i = 0; i < arrayLength - 1; i++)
@@ -330,17 +330,17 @@ namespace BGK.Utility
             return array;
         }
 
-        public static T[] BubbleSort<T>(T[] array) where T : System.IComparable<T>
+        public static T[] BubbleSort<T>(this T[] array) where T : System.IComparable<T>
         {
             return BubbleSort(array, Order.Asc);
         }
 
-        public static T[] InsertionSort<T>(T[] array) where T : System.IComparable<T>
+        public static T[] InsertionSort<T>(this T[] array) where T : System.IComparable<T>
         {
             return InsertionSort(array, Order.Asc);
         }
 
-        public static T[] SelectionSort<T>(T[] array) where T : System.IComparable<T>
+        public static T[] SelectionSort<T>(this T[] array) where T : System.IComparable<T>
         {
             return SelectionSort(array, Order.Asc);
         }
@@ -348,7 +348,7 @@ namespace BGK.Utility
 
     public static class SearchSorted
     {
-        public static int BinarySearch<T>(ref T[] array, T value, Order ord) where T : System.IComparable<T>
+        public static int BinarySearch<T>(this T[] array, T value, Order ord) where T : System.IComparable<T>
         {
             if (array == null || array.Length == 0)
             {
@@ -403,7 +403,7 @@ namespace BGK.Utility
 
     public static class SearchUnsorted
     {
-        public static int LinearSearch<T>(ref T[] array, T value)
+        public static int LinearSearch<T>(this T[] array, T value)
         {
             if (array == null)
             {
