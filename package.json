@@ -1,0 +1,15 @@
+{
+  "name": "com.bence.bgk",
+  "version": "1.0.0",
+  "displayName": "Bence's Game Kit",
+  "description": "BBSC - Bence's Backend System Collection",
+  "unity": "2018.1",
+  "keywords": [
+    "backend",
+    "Bence",
+    "Backend"
+  ],
+  "author": {
+    "name": "Albert Bence"
+  }
+}
