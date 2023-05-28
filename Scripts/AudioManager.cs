@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 //Bence's Game Kit
 namespace BGK.Audio
 {
+    [DisallowMultipleComponent]
     public class AudioManager : MonoBehaviour
     {
         public AudioMixerGroup Music;

@@ -17,9 +17,9 @@ namespace BGK.Audio
     {
         public string name = "";
         public AudioClip clip = null;
-        public float volume = 1f;
-        public float pitch = 1f;
-        public float space = 0f;
+        [Range(0f, 1f)] public float volume = 1f;
+        [Range(-3f, 3f)] public float pitch = 1f;
+        [Range(0f, 1f)] public float space = 0f;
         public bool loop = false;
         public AudioType type = AudioType.Effect;
     }

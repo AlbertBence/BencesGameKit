@@ -87,9 +87,12 @@ namespace BGK.SaveSystem
             StreamingContext all = new StreamingContext(StreamingContextStates.All);
 
             s.AddSurrogate(typeof(Color), all, new ColorSS());
+            s.AddSurrogate(typeof(Color32), all, new Color32SS());
             s.AddSurrogate(typeof(Vector2), all, new Vector2SS());
             s.AddSurrogate(typeof(Vector3), all, new Vector3SS());
             s.AddSurrogate(typeof(Vector4), all, new Vector4SS());
+            s.AddSurrogate(typeof(Vector2Int), all, new Vector2IntSS());
+            s.AddSurrogate(typeof(Vector3Int), all, new Vector3IntSS());
             s.AddSurrogate(typeof(Quaternion), all, new QuaternionSS());
             s.AddSurrogate(typeof(Mesh), all, new MeshSS());
 
@@ -377,6 +380,29 @@ namespace BGK.SaveSystem
             }
         }
 
+        public class Color32SS : ISerializationSurrogate
+        {
+            public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
+            {
+                Color32 c = (Color32)obj;
+                info.AddValue("r", c.r);
+                info.AddValue("g", c.g);
+                info.AddValue("b", c.b);
+                info.AddValue("a", c.a);
+            }
+
+            public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+            {
+                Color32 c = (Color32)obj;
+                c.r = (byte)info.GetValue("r", typeof(byte));
+                c.g = (byte)info.GetValue("g", typeof(byte));
+                c.b = (byte)info.GetValue("b", typeof(byte));
+                c.a = (byte)info.GetValue("a", typeof(byte));
+                obj = c;
+                return obj;
+            }
+        }
+
         public class Vector2SS : ISerializationSurrogate
         {
             public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
@@ -436,6 +462,46 @@ namespace BGK.SaveSystem
                 q.z = (float)info.GetValue("z", typeof(float));
                 q.w = (float)info.GetValue("w", typeof(float));
                 obj = q;
+                return obj;
+            }
+        }
+
+        public class Vector2IntSS : ISerializationSurrogate
+        {
+            public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
+            {
+                Vector2Int v2 = (Vector2Int)obj;
+                info.AddValue("x", v2.x);
+                info.AddValue("y", v2.y);
+            }
+
+            public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+            {
+                Vector2Int v2 = (Vector2Int)obj;
+                v2.x = (int)info.GetValue("x", typeof(int));
+                v2.y = (int)info.GetValue("y", typeof(int));
+                obj = v2;
+                return obj;
+            }
+        }
+
+        public class Vector3IntSS : ISerializationSurrogate
+        {
+            public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
+            {
+                Vector3Int v3 = (Vector3Int)obj;
+                info.AddValue("x", v3.x);
+                info.AddValue("y", v3.y);
+                info.AddValue("z", v3.z);
+            }
+
+            public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+            {
+                Vector3Int v3 = (Vector3Int)obj;
+                v3.x = (int)info.GetValue("x", typeof(int));
+                v3.y = (int)info.GetValue("y", typeof(int));
+                v3.z = (int)info.GetValue("z", typeof(int));
+                obj = v3;
                 return obj;
             }
         }
