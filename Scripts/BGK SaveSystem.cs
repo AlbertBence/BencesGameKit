@@ -9,7 +9,7 @@ namespace BGK.SaveSystem
 {
     public static class SaveSys
     {
-        public static void Save(object input, SerializationSurrogate[] custom, string path, string name)
+        public static void Save<T>(T input, SerializationSurrogate[] custom, string path, string name)
         {
             BinaryFormatter f = Formatter(custom);
             if (!Directory.Exists(path))
@@ -22,12 +22,12 @@ namespace BGK.SaveSystem
             RefreshSaveFileList(path, name);
         }
 
-        public static void Load(out object output, SerializationSurrogate[] custom, string path, string name)
+        public static void Load<T>(out T output, SerializationSurrogate[] custom, string path, string name)
         {
             if (!File.Exists(path + "/" + name))
             {
                 Debug.LogError("Save file does not exist at this location: " + path + "/" + name);
-                output = null;
+                output = default(T);
                 return;
             }
 
@@ -36,12 +36,12 @@ namespace BGK.SaveSystem
 
             try
             {
-                output = f.Deserialize(stream);
+                output = (T)f.Deserialize(stream);
             }
             catch
             {
                 Debug.LogError("Failed to load save file at this location: " + path + "/" + name);
-                output = null;
+                output = default(T);
             }
             stream.Close();
         }
@@ -284,60 +284,60 @@ namespace BGK.SaveSystem
             DeleteSaveFile(Application.persistentDataPath, name);
         }
 
-        public static void Save(object input, string path, string name)
+        public static void Save<T>(T input, string path, string name)
         {
             Save(input, null, path, name);
         }
 
-        public static void Load(out object output, string path, string name)
+        public static void Load<T>(out T output, string path, string name)
         {
             Load(out output, null, path, name);
         }
 
-        public static void Save(object input, SerializationSurrogate[] custom, string name)
+        public static void Save<T>(T input, SerializationSurrogate[] custom, string name)
         {
             Save(input, custom, Application.persistentDataPath, name);
         }
 
-        public static void Load(out object output, SerializationSurrogate[] custom, string name)
+        public static void Load<T>(out T output, SerializationSurrogate[] custom, string name)
         {
             Load(out output, custom, Application.persistentDataPath, name);
         }
 
-        public static object Load(SerializationSurrogate[] custom, string path, string name)
+        public static T Load<T>(SerializationSurrogate[] custom, string path, string name)
         {
-            object output;
+            T output;
             Load(out output, custom, path, name);
             return output;
         }
 
-        public static object Load(SerializationSurrogate[] custom, string name)
+        public static T Load<T>(SerializationSurrogate[] custom, string name)
         {
-            object output;
+            T output;
             Load(out output, custom, Application.persistentDataPath, name);
             return output;
         }
 
-        public static void Save(object input, string name)
+        public static void Save<T>(T input, string name)
         {
             Save(input, Application.persistentDataPath, name);
         }
 
-        public static void Load(out object output, string name)
+        public static void Load<T>(out T output, string name)
         {
             Load(out output, Application.persistentDataPath, name);
         }
 
-        public static object Load(string path, string name)
+        public static T Load<T>(string path, string name)
         {
-            object output;
+            T output;
             Load(out output, path, name);
             return output;
         }
 
-        public static object Load(string name)
+        public static T Load<T>(string name)
         {
-            object output;
+            T output;
             Load(out output, Application.persistentDataPath, name);
             return output;
         }

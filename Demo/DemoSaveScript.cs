@@ -46,24 +46,22 @@ namespace BGK.Demo
             if (Methode == 0)
             {
                 //Load SaveSystemDemo.dat from default path
-                SaveClass = SaveSys.Load("SaveSystemDemo") as DemoSaveClass; //(Save file name)
+                SaveClass = SaveSys.Load<DemoSaveClass>("SaveSystemDemo"); //(Save file name)
             }
             else if (Methode == 1)
             {
                 //Load SaveSystemDemo.dat from default path
-                SaveSys.Load(out object temp, "SaveSystemDemo"); //(Output variable, Save file name)
-                SaveClass = temp as DemoSaveClass;
+                SaveSys.Load(out SaveClass, "SaveSystemDemo"); //(Output variable, Save file name)
             }
             else if (Methode == 2)
             {
                 //Load SaveSystemDemo.dat from the directory named Demo in the default path
-                SaveClass = SaveSys.Load(Application.persistentDataPath + "/Demo", "SaveSystemDemo") as DemoSaveClass; //(Save file location,Save file name)
+                SaveClass = SaveSys.Load<DemoSaveClass>(Application.persistentDataPath + "/Demo", "SaveSystemDemo"); //(Save file location,Save file name)
             }
             else
             {
                 //Load SaveSystemDemo.dat from the directory named Demo in the default path
-                SaveSys.Load(out object temp, Application.persistentDataPath + "/Demo", "SaveSystemDemo"); //(Output variable, Save file location, Save file name)
-                SaveClass = temp as DemoSaveClass;
+                SaveSys.Load(out SaveClass, Application.persistentDataPath + "/Demo", "SaveSystemDemo"); //(Output variable, Save file location, Save file name)
             }
         }
     }
