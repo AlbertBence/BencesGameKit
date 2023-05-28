@@ -273,5 +273,21 @@ namespace BGK.Audio
 
             currentAudios = NewAudios;
         }
+
+        public void RemoveAllAudio()
+        {
+            for (int i = 0; i < currentAudios.Length; i++)
+            {
+                Destroy(currentAudios[i].source);
+            }
+
+            currentAudios = new ManagedAudio[0];
+        }
+
+        private void OnDestroy()
+        {
+            RemoveAllAudio();
+            instance = null;
+        }
     }
 }
