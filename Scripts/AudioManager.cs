@@ -287,7 +287,10 @@ namespace BGK.Audio
         private void OnDestroy()
         {
             RemoveAllAudio();
-            instance = null;
+            if (instance == this)
+            {
+                instance = null;
+            }
         }
     }
 }
