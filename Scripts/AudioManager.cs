@@ -126,16 +126,6 @@ namespace BGK.Audio
 
                 ambient = PlayAudio(AudioLib.ambient[amb], true);
             }
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                PlayAudio("click");
-            }
-
-            if (Input.mouseScrollDelta.y != 0)
-            {
-                PlayAudio("scroll");
-            }
         }
 
         void CalcPause()
