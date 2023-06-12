@@ -27,10 +27,12 @@ namespace BGK.Audio
     public class ManagedAudio
     {
         public AudioSource source;
+        public GameObject gameObject;
         public bool PlayBetweenScenes;
+        public bool DestroyGameObject;
         public AudioType type;
 
-        public ManagedAudio(Audio _audio, AudioSource _source, bool _PlayBetweenScenes)
+        public ManagedAudio(Audio _audio, AudioSource _source, bool _PlayBetweenScenes, bool _DestroyGameObject)
         {
             source = _source;
             source.clip = _audio.clip;
@@ -41,6 +43,8 @@ namespace BGK.Audio
             type = _audio.type;
             PlayBetweenScenes = _PlayBetweenScenes;
             source.playOnAwake = true;
+            DestroyGameObject = _DestroyGameObject;
+            gameObject = source.gameObject;
         }
     }
 }

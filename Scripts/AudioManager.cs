@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 //Bence's Game Kit
 namespace BGK.Audio
@@ -51,6 +52,7 @@ namespace BGK.Audio
             }
 
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += SceneLoaded;
 
             track = 0;
             nonStop = 1;
@@ -82,7 +84,7 @@ namespace BGK.Audio
 
             for (int i = 0; i < currentAudios.Length; i++)
             {
-                if (!currentAudios[i].source.isPlaying)
+                if (currentAudios[i].source == null || !currentAudios[i].source.isPlaying)
                 {
                     RemoveAudio(i);
                     i--;
@@ -142,7 +144,7 @@ namespace BGK.Audio
             }
         }
 
-        private void OnLevelWasLoaded(int level)
+        void SceneLoaded(Scene LoadedScene, LoadSceneMode mode)
         {
             if (scene != gameObject.scene.name && scene != "")
             {
@@ -173,7 +175,30 @@ namespace BGK.Audio
             {
                 if (a.name == name)
                 {
-                    return InstanceAudio(a, PlayBetweenScenes, parent);
+                    return InstanceAudio(a, PlayBetweenScenes, false, parent);
+                }
+            }
+
+            Debug.LogWarning("Audio not found: " + name);
+            return null;
+        }
+
+        public AudioSource PlayAudio(string name, Vector3 position, bool PlayBetweenScenes)
+        {
+            GameObject audio = new GameObject();
+            audio.name = "Audio: " + name;
+            audio.transform.position = position;
+
+            if (PlayBetweenScenes)
+            {
+                DontDestroyOnLoad(audio);
+            }
+
+            foreach (Audio a in AudioLib.audios)
+            {
+                if (a.name == name)
+                {
+                    return InstanceAudio(a, PlayBetweenScenes, true, audio);
                 }
             }
 
@@ -196,8 +221,13 @@ namespace BGK.Audio
             return PlayAudio(name, parent, false);
         }
 
+        public AudioSource PlayAudio(string name, Vector3 position)
+        {
+            return PlayAudio(name, position, false);
+        }
 
-        AudioSource InstanceAudio(Audio audio, bool PlayBetweenScenes, GameObject parent)
+
+        AudioSource InstanceAudio(Audio audio, bool PlayBetweenScenes, bool DestroyGameObject, GameObject parent)
         {
             ManagedAudio[] NewAudios = new ManagedAudio[currentAudios.Length + 1];
 
@@ -217,7 +247,7 @@ namespace BGK.Audio
                 source = parent.AddComponent<AudioSource>();
             }
 
-            NewAudios[NewAudios.Length - 1] = new ManagedAudio(audio, source, PlayBetweenScenes);
+            NewAudios[NewAudios.Length - 1] = new ManagedAudio(audio, source, PlayBetweenScenes, DestroyGameObject);
 
             if (NewAudios[NewAudios.Length - 1].type == AudioType.Music)
             {
@@ -259,7 +289,20 @@ namespace BGK.Audio
                 }
             }
 
-            Destroy(currentAudios[ind].source);
+            if (!currentAudios[ind].DestroyGameObject)
+            {
+                if (currentAudios[ind].source != null)
+                {
+                    Destroy(currentAudios[ind].source);
+                }
+            }
+            else
+            {
+                if (currentAudios[ind].gameObject != null)
+                {
+                    Destroy(currentAudios[ind].gameObject);
+                }
+            }
 
             currentAudios = NewAudios;
         }
@@ -277,6 +320,7 @@ namespace BGK.Audio
         private void OnDestroy()
         {
             RemoveAllAudio();
+            SceneManager.sceneLoaded -= SceneLoaded;
             if (instance == this)
             {
                 instance = null;
